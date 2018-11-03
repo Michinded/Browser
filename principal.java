@@ -4,8 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class principal extends JFrame{
+//Librerias Externas
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
+//******************
 
+public class principal extends JFrame{
+	
+//Iniciador de NJavegador (CUIDADO AL IMPLEMENTAR)
+	JWebBrowser navegador = new JWebBrowser();
+	
 	private final JLabel user = new JLabel ("Usuario: ");
 	private final JTextField user1 = new JTextField (10);
 	private final JLabel pass = new JLabel ("Contraseña: ");
@@ -30,11 +41,18 @@ public class principal extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		Login();
-		//contenedor.add(separador);
+		
 		
 	}
 	
 	public void Login(){
+		String SP, SU, SP2;
+		String SP1;
+		SP = "123456";
+		SU = "Admin";
+		
+		
+		//Metodos para colocar los parametros de LogIn;
 		Container contenedor = getContentPane();
 		SpringLayout lay = new SpringLayout();
 		
@@ -64,20 +82,55 @@ public class principal extends JFrame{
 		lay.putConstraint ( SpringLayout.WEST, ok, 440, SpringLayout.WEST, contenedor);
 	
 		String hi = "ERROR DE ACCESO";
+		//Accion al presionar el boton OK
 		ok.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent evento) {
-			
-				JOptionPane.showMessageDialog(null, "ACCESO DENEGADO", hi, 1);
 				
+				//Obtiene los contenidos en los campos de texto
+				String valorPass = new String(pass1.getPassword());
+				String valorUser = new String(user1.getText());
+				
+				//Compara si los dos campos esta rellenados y los limpia si no lo estan (Cada bloque hace lo mismo)
+				if(user1.getText().isEmpty() || valorPass.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "ACCESO DENEGADO, DEBE LLENAR AMBOS CAMPOS", hi, 1);
+					user1.setText("");
+					pass1.setText("");
+				}
+				else {
+					//Caso contrario
+					
+					//Si el valor de los campos es igual a las cadenas de User y Pass
+					// Son iguales concede Acceso
+					if(valorPass.matches(SP) && valorUser.matches(SU)) {
+					
+						
+						JOptionPane.showMessageDialog(null, "Bienvenido: \n"+valorUser, hi, 1);
+						
+						user1.setText("");
+						pass1.setText("");
+						
+						user.setVisible(false);
+					}
+					//Si no muestra un mensaje de que no se encuentra registrado
+					else {
+						
+						JOptionPane.showMessageDialog(null, "Lo sentimos el usuario: \n"+valorUser+"\nNo se encuentra registrado", hi, 1);
+						
+						user1.setText("");
+						pass1.setText("");
+						
+					}
+					
+				}
 			}
 		});
-		
 		
 		contenedor.add(user);
 		contenedor.add(user1);
 		contenedor.add(pass);
 		contenedor.add(pass1);
 		contenedor.add(ok);
+		//contenedor.add(separador);
 	}
 	
 	
